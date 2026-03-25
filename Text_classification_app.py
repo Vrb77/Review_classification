@@ -1,40 +1,11 @@
-import re
-import numpy as np
 import streamlit as st
 import joblib
-from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.pipeline import Pipeline
 from keras.models import load_model
 
-# ── These classes MUST be defined here so joblib can unpickle the pipeline ──
-
-class TextCleaner(BaseEstimator, TransformerMixin):
-
-    def fit(self, X, y=None):
-        return self
-
-    def transform(self, X):
-        return [self._clean(text) for text in X]
-
-    def _clean(self, text):
-        text = text.lower()
-        pattern = r"[^a-z ]"
-        text = re.sub(pattern, "", text)
-        return text
-
-
-class TextTransformer(BaseEstimator, TransformerMixin):
-
-    def fit(self, X, y=None):
-        self.tfidf = TfidfVectorizer()
-        self.tfidf.fit(X)
-        return self
-
-    def transform(self, X):
-        return self.tfidf.transform(X).toarray()
-
-# ────────────────────────────────────────────────────────────────────────────
+# Import custom classes from the separate module — this is required so
+# joblib can unpickle the pipeline correctly (pickle stores the module path,
+# so the classes must live in a stable, importable module, not __main__)
+from preprocessor import TextCleaner, TextTransformer  # noqa: F401
 
 # Set the tab title
 st.set_page_config(page_title="Review Classification")
