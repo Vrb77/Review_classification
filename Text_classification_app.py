@@ -15,14 +15,10 @@ st.title("Positive and Negative Review Classification Project")
 # Set header
 st.subheader("By Vaishnavi Badade")
 
-# Load the pipeline (data cleaning, preprocessing) and model
-pre = joblib.load("text_classification_pre.joblib")
 model = load_model("TextClassification.keras")
 
 # Create Input boxes that takes input from the user 
-
-review = st.number_input("review")
-
+review = st.text_input("review")
 
 # Include a button. After providing all the inputs, user will click on the button. The button should provide the necessary predictions
 submit = st.button("Predict Sentiment")
